@@ -1,0 +1,461 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package prg510s.individual.assignment.pkg2019;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+
+    private static final Scanner KEYBOARD = new Scanner(System.in);
+    private static final int CONFIRMATION_CODE = 345;
+    private static final int ADMIN_CODE = 251;
+    private static final int KILL_SWITCH = 0;
+    private static final int CUSTOM_MENU = 77;
+    private static final int CUSTOM_INTERACT=99;
+    
+    private static ArrayList<Integer> itemCodes = new ArrayList<Integer>();
+    private static ArrayList<String> itemNames = new ArrayList<String>();
+    private static ArrayList<Double> itemPrices = new ArrayList<Double>();
+    private static ArrayList<Integer> amountInStock = new ArrayList<Integer>();
+
+    private static ArrayList<Double> amountIn = new ArrayList<Double>();
+    private static ArrayList<Double> amountOut = new ArrayList<Double>();
+
+    private static ArrayList<Double> amountTendered = new ArrayList<Double>();
+    private static ArrayList<Double> ChangeDue = new ArrayList<Double>();
+    private static ArrayList<Integer> numTwoHundreds = new ArrayList<Integer>();
+    private static ArrayList<Integer> numHundreds = new ArrayList<Integer>();
+    private static ArrayList<Integer> numFifties = new ArrayList<Integer>();
+    private static ArrayList<Integer> numTwenties = new ArrayList<Integer>();
+    private static ArrayList<Integer> numTens = new ArrayList<Integer>();
+    private static ArrayList<Integer> numFives = new ArrayList<Integer>();
+    private static ArrayList<Integer> numOnes = new ArrayList<Integer>();
+    private static ArrayList<Integer> numFiftyCents = new ArrayList<Integer>();
+    private static ArrayList<Integer> numTenCents = new ArrayList<Integer>();
+    private static ArrayList<Integer> numFiveCents = new ArrayList<Integer>();
+    private static ArrayList<Integer> numOneCents = new ArrayList<Integer>();
+     private static ArrayList<String> reciept = new ArrayList<String>(); 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+
+        int mainMenuVal = 0;
+
+        do {
+            mainMenuVal = displayMainMenu();
+
+            switch (mainMenuVal) {
+                case ADMIN_CODE:
+                    adminMenu();
+                    break;
+                case KILL_SWITCH:
+                    shutdownMessage();
+                    break;
+                case CUSTOM_MENU:
+                    customerMenu();
+                    break;
+                case CUSTOM_INTERACT;
+                 CustomerInteraction() ;
+                 break;
+
+                default: // any other entry goes here
+                    productMenu();
+            }
+
+        } while (mainMenuVal != 0);
+    }
+
+    private static void productMenu() {
+        System.out.println("Product menu goes here");
+    }
+
+    private static void shutdownMessage() {
+        System.out.println("Powering off, see you next time!");
+    }
+
+    private static void adminMenu() {
+        System.out.println("Enter confirmation code to access Admin Menu:");
+        int pinCode = KEYBOARD.nextInt();
+        if (pinCode != CONFIRMATION_CODE) {
+            System.out.println("Incorrect code entered, returning to Main Menu.");
+            return;
+        }
+        administerTheSystem();
+
+    }
+
+    // This enabled the owner to administer the system
+    private static void administerTheSystem() {
+        int choice = 0;
+        do {
+            System.out.println("*   Admin Menu   *");
+            System.out.println("1.Add item(s)");
+            System.out.println("2.Modify item price");
+            System.out.println("3.Print summary of all items in the store");
+            System.out.println("4.Cash in");
+            System.out.println("5.Cash out");
+            // TODO Add more options here accordingly.
+            System.out.println("0.Return to Main Menu");
+            System.out.println("Enter your choice");
+            choice = KEYBOARD.nextInt();
+
+            switch (choice) {
+                case 0:
+                    return; // go back to the Main Menu
+                case 1:
+                    addItem();
+                    break;
+                case 2:
+                    modifyItem();
+                    break;
+                case 3:
+                    summaryOfAllItemsInStore();
+                
+                    break;
+                case 4:
+                    CashIn();
+                    break;
+                case 5:
+                    CashOut();
+                    break;
+
+            }
+        } while (choice != 0);
+    }
+
+    // This prints the summary for all item in the store
+    public static void summaryOfAllItemsInStore() {
+        System.out.println("*Items Summary*");
+        System.out.println("---------------------");
+        System.out.println("Item Code \t\t Item Name \t\t\t\t Item Quantity \t\t Item Price");
+        for (int i = 0; i < itemCodes.size(); i++) {
+            System.out.println(itemCodes.get(i) + " \t\t\t " + itemNames.get(i) + " \t\t\t\t " + amountInStock.get(i) + " \t\t " + itemPrices.get(i));
+        }
+    }
+
+    private static void customerMenu() {
+        System.out.println("List of available items:");
+        System.out.println("Item Code \t\t Item Name \t\t\t\t Item Quantity \t\t Item Price");
+        for (int i = 0; i < itemCodes.size(); i++) {
+            System.out.println(itemCodes.get(i) + " \t\t\t " + itemNames.get(i) + " \t\t\t\t " + amountInStock.get(i) + " \t\t " + itemPrices.get(i));
+        }
+    }
+
+    // Enable the Admin to Edit an item.
+    private static void modifyItem() {
+        // code to modify the item here.
+        System.out.println("Enter the item code to modify:");
+        int itemCode = KEYBOARD.nextInt();
+        int index = itemCodes.indexOf(itemCode);
+
+        if (index != -1) {
+
+            printItemDetails(index);
+
+            System.out.println("\n");
+            System.out.println("1.Modify item name");
+            System.out.println("2.Modify item price");
+            System.out.println("3.Modify item quantity");
+            System.out.println("4.Modify item price");
+            System.out.println("0.cancel");
+            System.out.println("Enter your choice");
+            int choice = KEYBOARD.nextInt();
+
+            switch (choice) {
+                case 0:
+                    return;
+                case 1:
+                    System.out.println("Enter new item name");
+                    itemNames.set(index, KEYBOARD.next());
+                    break;
+                case 2:
+                    System.out.println("Enter new item price");
+                    itemPrices.set(index, KEYBOARD.nextDouble());
+                    break;
+                case 3:
+                    System.out.println("Enter new item quantity");
+                    amountInStock.set(index, KEYBOARD.nextInt());
+                    break;
+                case 4:
+                    System.out.println("Enter new item code");
+                    itemCodes.set(index, KEYBOARD.nextInt());
+                    break;
+            }
+            printItemDetails(index);
+
+        } else {
+            System.out.println("The item code entered is not in the store");
+        }
+
+    }
+
+    private static void printItemDetails(int index) {
+        System.out.println("*Items Summary*");
+        System.out.println("---------------------");
+        System.out.println("Item Code \t\t Item Name \t\t\t\t Item Quantity \t\t Item Price");
+        System.out.println(itemCodes.get(index) + " \t\t\t " + itemNames.get(index) + " \t\t\t\t " + amountInStock.get(index) + " \t\t " + itemPrices.get(index));
+    }
+
+    // Enable the Admin to add Item in the system.
+    private static void addItem() {
+        String answer = "yes";
+        int index = 0;
+        while (!answer.equalsIgnoreCase("no")) {
+            System.out.println("Enter item name:");
+            itemNames.add(KEYBOARD.next());
+            System.out.println("Enter item code:");
+            itemCodes.add(KEYBOARD.nextInt());
+            System.out.println("Enter item quantity:");
+            amountInStock.add(KEYBOARD.nextInt());
+            System.out.println("Enter item price:");
+            itemPrices.add(KEYBOARD.nextDouble());
+            System.out.println("Do you want to add another item?");
+            System.out.println("Enter no to stop");
+            System.out.println("Enter any other key to more");
+            answer = KEYBOARD.next();
+
+        }
+    }
+
+    public static void CustomerInteraction() {
+        String reply = "yes";
+        int index = 0;
+        while (!reply.equalsIgnoreCase("no")) {
+            System.out.println("Enter item code:");
+            itemCodes.get(KEYBOARD.nextInt());
+            System.out.println("Enter quantity");
+            int quantity = KEYBOARD.nextInt();
+            System.out.println("Would you like to buy more items?");
+            System.out.println("Enter yes to buy more");
+            System.out.println("or enter no to stop");
+            reply = KEYBOARD.nextLine();
+        }
+    }
+
+    private static void CustomerCashSystem() {
+
+        System.out.println("Enter amount");
+        amountIn.add(KEYBOARD.nextDouble());
+        System.out.println("Enter number of 200s:");
+        numTwoHundreds.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 100s:");
+        numHundreds.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 50s:");
+        numFifties.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 10s: ");
+        numTens.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 5s:");
+        numFives.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 1s:");
+        numOnes.add(KEYBOARD.nextInt());
+        System.out.println("Emter number of 50c:");
+        numFiftyCents.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 10c:");
+        numTenCents.add(KEYBOARD.nextInt());
+        System.out.println("Enter number of 5c:");
+        numFiveCents.add(KEYBOARD.nextInt());
+        System.out.println("Add number of 1c");
+        numOneCents.add(KEYBOARD.nextInt());
+        return;
+    }
+    public static void CustomerPay(){
+        double sumOfitemPrices = itemPrices.get(idex)*quantity ;
+    }
+
+    public static void CustomersChangeManagement() {
+        System.out.println("Amount tendered N$:"+amountIn);
+        
+        float toCharge =sumOfitemPrices;
+        String out = "";
+        if (amountIn >= toCharge) {
+            double change = amountIn - toCharge;
+            if (amountIn > toCharge) {
+                System.out.println("Your change is: N$ " + String.format("%.2f", change));
+            } else {
+                System.out.println("Your change is: N$ 0.00");
+            }
+            System.out.print("Disbursed as follows: ");
+            if (change >= 200) {
+                int twoh = (int) change / 200;
+                change = (int) change - twoh * 200;
+                out = twoh + " x N$ 200; ";
+                //System.out.print(out);
+            }
+            if (change >= 100) {
+                int oneh = (int) change / 100;
+                change = change - (float) oneh * 100;
+                out = oneh + " x N$100; ";
+                //System.out.print(out);
+            }
+            if (change >= 50) {
+                int fit = (int) change / 50;
+                change = change - (float) fit * 50;
+                out = fit + " x N$50; ";
+                //System.out.print(out);
+            }
+            if (change >= 20) {
+                int tty = (int) change / 20;
+                change = change - (float) tty * 20;
+                out = tty + " x N$20; ";
+
+            } else {
+                System.out.print("0 x N$20; ");
+            }
+            System.out.print(out);
+            if (change >= 10) {
+                int ten = (int) change / 10;
+                change = change - (float) ten * 10;
+                out = ten + " x N$10; ";
+                System.out.print(out);
+            } else {
+                System.out.print("0 x N$10; ");
+            }
+            if (change >= 5) {
+                int five = (int) change / 5;
+                change = change - (float) five * 5;
+                out = five + " x N$5; ";
+                System.out.print(out);
+            } else {
+                System.out.print("0 x N$5; ");
+            }
+            if (change >= 1) {
+               
+                int oned = (int) change / 1;
+                change = change - oned * 1;
+                out = oned + " x N$1; ";
+                System.out.print(out);
+            } else {
+                System.out.print("0 x N$1; ");
+            }
+
+            if (change >= 0.5) {
+                double fcent = change * 2;
+                change = change % 0.5;
+
+                out = (int) fcent + " x 50c; ";
+                System.out.print(out);
+            } else {
+                System.out.print("0 x 50c; ");
+            }
+
+            if (change >= 0.1) {
+                double tenc = change * 10;
+                change = change % 10;
+                out = (int) tenc + " x 10c; ";
+                System.out.print(out);
+            } else {
+                System.out.print("0 x 10c; ");
+            }
+
+            if (change >= 0.05) {
+                System.out.print("1 x 5c ");
+            } else {
+                System.out.print("0 x 5c ");
+            }
+
+        } else {
+            System.out.println("You'll need to pay more.");
+        }
+    }
+
+    public static void CashIn() {
+        String response = "yes";
+        int index = 0;
+        while (!response.equalsIgnoreCase("no")) {
+            System.out.println("Enter amount");
+            amountIn.add(KEYBOARD.nextDouble());
+            System.out.println("Enter number of 200s:");
+            numTwoHundreds.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 100s:");
+            numHundreds.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 50s:");
+            numFifties.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 10s: ");
+            numTens.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 5s:");
+            numFives.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 1s:");
+            numOnes.add(KEYBOARD.nextInt());
+            System.out.println("Emter number of 50c:");
+            numFiftyCents.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 10c:");
+            numTenCents.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 5c:");
+            numFiveCents.add(KEYBOARD.nextInt());
+            System.out.println("Add number of 1c");
+            numOneCents.add(KEYBOARD.nextInt());
+            System.out.println("Do you wish to add more money?");
+            System.out.println("Enter no to stop");
+            System.out.println("or Enter yes to proceed");
+            response = KEYBOARD.nextLine();
+
+        }
+
+    }
+
+    public static void CashOut() {
+        String response = "yes";
+        int index = 0;
+        while (!response.equalsIgnoreCase("no")) {
+            System.out.println("Enter amount");
+            amountIn.add(KEYBOARD.nextDouble());
+            System.out.println("Enter number of 200s:");
+            numTwoHundreds.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 100s:");
+            numHundreds.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 50s:");
+            numFifties.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 10s: ");
+            numTens.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 5s:");
+            numFives.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 1s:");
+            numOnes.add(KEYBOARD.nextInt());
+            System.out.println("Emter number of 50c:");
+            numFiftyCents.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 10c:");
+            numTenCents.add(KEYBOARD.nextInt());
+            System.out.println("Enter number of 5c:");
+            numFiveCents.add(KEYBOARD.nextInt());
+            System.out.println("Add number of 1c");
+            numOneCents.add(KEYBOARD.nextInt());
+            System.out.println("Do you wish to add more money?");
+            System.out.println("Enter no to stop");
+            System.out.println("or Enter yes to proceed");
+            response = KEYBOARD.nextLine();
+
+        }
+
+    }
+    public static void reciept(){
+        System.out.println("//*-*-*-*--*-*-*-*-*-*\\");
+        System.out.println("The JOKA Vending Machine");
+        System.out.println("//*-*-*-*-*-*-*-*-*-*-*\\");
+        System.out.println("1245,Jone street,Wakanda");
+        System.out.println("_-_-_-_-_-_- _-_-_-_-_-_");
+        System.out.println("items : "+itemNames.get(index));
+        System.out.println("Total Price : "+toCharge);
+        System.out.println("Amount tendered : "+amountIn);
+        System.out.println("change due : "+change);
+        System.out.print("Disbursed as follows: "+out);
+        System.out.println("THANK YOU FOR BUYING HERE,SEE YOU SOON!");
+    }
+
+    public static int displayMainMenu() {
+        int optionn = 0;
+        System.out.println("* Welcome To The JOKA Vending Machine *");
+        System.out.println("***********************************");
+        System.out.println("+      *Ready To Serve You*      +");
+        System.out.println("***********************************");
+        System.out.println("Enter an item code or admin pin code,and enter 77 to display customer menu and Enter 99 to buy:");
+        optionn = KEYBOARD.nextInt();
+        return optionn;
+
+    }
+
+}
